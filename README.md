@@ -27,4 +27,4 @@ client_count       = 5
 email              = "mail@example.org"
 ```
 
-> You need set current month from `start_date` in `time_period` from resource `azurerm_consumption_budget_resource_group`.
+> You need set current month for `start_date` in `time_period` from resource `azurerm_consumption_budget_resource_group`.
