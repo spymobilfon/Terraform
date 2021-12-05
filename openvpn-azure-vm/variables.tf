@@ -106,3 +106,14 @@ variable "email" {
         error_message = "Email for notifications don't be empty."
     }
 }
+
+variable "budget_start_date" {
+    type        = string
+    description = "Start date of consumption budget (example 2021-09-01T00:00:00Z), value should be the current date"
+    default     = ""
+
+    validation {
+        condition     = length(var.budget_start_date) > 0
+        error_message = "Start date of consumption budget don't be empty."
+    }
+}

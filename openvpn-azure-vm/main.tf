@@ -174,7 +174,7 @@ resource "azurerm_consumption_budget_resource_group" "main" {
     time_grain = "Monthly"
 
     time_period {
-        start_date = "2021-09-01T00:00:00Z"
+        start_date = var.budget_start_date
         end_date   = "2031-01-01T00:00:00Z"
     }
 

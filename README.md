@@ -5,7 +5,7 @@ OpenVPN server deployment on Azure VM based on Ubuntu 18.04 LTS with generating 
 
 Input variables:
 - `resource_group` - Azure resource group name;
-- `location` - Azure resource location
+- `location` - Azure resource location;
 - `custom_tags` - Azure resource tags;
 - `vm_name` - Azure VM name;
 - `vm_size` - Azure VM size;
@@ -13,9 +13,10 @@ Input variables:
 - `domain_name_prefix` - Domain name prefix linked with public IP;
 - `nsg_rules` - Azure NSG rule;
 - `client_count` - OpenVPN client count;
-- `email` - Email for notifications.
+- `email` - Email for notifications;
+- `budget_start_date` - Start date of consumption budget (example 2021-09-01T00:00:00Z), value should be the current date.
 
-Example:
+Example file with input values (`terraform.tfvars`):
 ```
 resource_group     = "rg1"
 location           = "westeurope"
@@ -25,6 +26,5 @@ user_name          = "user1"
 domain_name_prefix = "vpn1"
 client_count       = 5
 email              = "mail@example.org"
+budget_start_date  = "2021-09-01T00:00:00Z"
 ```
-
-> You need set current month for `start_date` in `time_period` from resource `azurerm_consumption_budget_resource_group`.
