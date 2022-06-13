@@ -1,0 +1,5 @@
+controller:
+  replicaCount: 2
+  config:
+    enable-ocsp: "true"
+    ssl-protocols: TLSv1.1 TLSv1.2
