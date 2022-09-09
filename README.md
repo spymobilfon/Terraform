@@ -69,3 +69,93 @@ custom_tags = {
 ```
 
 For each terraform variables in file `variables.tf` defined description.
+
+## azure-postgresql
+Azure PostgreSQL Flexible Server.
+
+### local
+
+1. Set location
+```
+cd azure-postgresql/terraform/local
+```
+2. Init terraform
+```
+terraform init
+```
+3. Apply terraform
+```
+terraform apply
+```
+4. For remove all resources
+```
+terraform destroy
+```
+
+Example file with input values (`terraform.tfvars`), should be create in root folder with project:
+```
+custom_name = "db-pg-01"
+location = "northeurope"
+pg_login = "dbpgadmin"
+pg_password = "cHaNgE_Me_1"
+firewall_rules = {
+    "office" = {
+        name             = "office",
+        start_ip_address = "10.10.10.0",
+        end_ip_address   = "10.10.10.255"
+    }
+}
+```
+
+For each terraform variables in file `variables.tf` defined description.
+
+## prometheus-msteams
+Prometheus MS Teams.
+
+### Apply Terragrunt configs
+```
+cd ./environments/[local|dev|prod]
+# Run cloud resources module to get credentials
+terragrunt apply --terragrunt-config ./cloud_resources/terragrunt.hcl --terragrunt-non-interactive -auto-approve
+# Run helm module to deploy helm release to aks clusters from configuration
+terragrunt apply --terragrunt-config ./kubernetes_resources/terragrunt.hcl --terragrunt-non-interactive -auto-approve
+```
+
+## prometheus-operator
+Prometheus Operator.
+
+### Manually delete CRD's
+```
+kubectl delete crd alertmanagerconfigs.monitoring.coreos.com
+kubectl delete crd alertmanagers.monitoring.coreos.com
+kubectl delete crd podmonitors.monitoring.coreos.com
+kubectl delete crd probes.monitoring.coreos.com
+kubectl delete crd prometheuses.monitoring.coreos.com
+kubectl delete crd prometheusrules.monitoring.coreos.com
+kubectl delete crd servicemonitors.monitoring.coreos.com
+kubectl delete crd thanosrulers.monitoring.coreos.com
+```
+
+### Check active CRD's
+```
+kubectl get crd
+```
+
+### Apply new CRD's
+```
+kubectl create -f [path_to_crd]
+```
+
+### Check active CRD's
+```
+kubectl get crd
+```
+
+### Apply Terragrunt configs
+```
+cd ./environments/[local|dev|prod]
+# Run cloud resources module to get credentials
+terragrunt apply --terragrunt-config ./cloud_resources/terragrunt.hcl --terragrunt-non-interactive -auto-approve
+# Run helm module to deploy helm release to aks clusters from configuration
+terragrunt apply --terragrunt-config ./kubernetes_resources/terragrunt.hcl --terragrunt-non-interactive -auto-approve
+```

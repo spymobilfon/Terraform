@@ -1,0 +1,94 @@
+{{ define "teams.card" }}
+{
+  "@type": "MessageCard",
+  "@context": "http://schema.org/extensions",
+  "themeColor": "{{- if eq .Status "resolved" -}}2DC72D
+                 {{- else if eq .Status "firing" -}}
+                    {{- if eq .CommonLabels.severity "critical" -}}8C1A1A
+                    {{- else if eq .CommonLabels.severity "warning" -}}FFA500
+                    {{- else -}}808080{{- end -}}
+                 {{- else -}}808080{{- end -}}",
+  "summary": "{{- if eq .CommonAnnotations.summary "" -}}
+                  {{- if eq .CommonAnnotations.message "" -}}
+                    {{- .CommonLabels.alertname -}}
+                  {{- else -}}
+                    {{- .CommonAnnotations.message -}}
+                  {{- end -}}
+              {{- else -}}
+                  {{- .CommonAnnotations.summary -}}
+              {{- end -}}",
+  "title": "Thanos Alert ({{ .Status }})",
+  "sections": [
+  {{- range $index, $alert := .Alerts }}{{- if $index }},{{- end }}
+  {{ $grafanaUrl := "" }}
+  {{- if regexMatch "^OOMKiller.+$" $alert.Labels.alertname -}}
+    {{ $grafanaUrl = printf "%s" "https://grafana.example.org/" }}
+  {{- else if regexMatch "^PodNotReady.+$" $alert.Labels.alertname -}}
+    {{ $grafanaUrl = printf "%s" "https://grafana.example.org/" }}
+  {{- else -}}
+    {{ $grafanaUrl = printf "%s" "https://grafana.example.org/" }}
+  {{- end -}}
+    {
+      "activityTitle": "[{{ $alert.Annotations.description }}]({{ $grafanaUrl }})",
+      "facts": [
+        {
+          "name": "status",
+          "value": "{{ $alert.Status }}"
+        },
+        {
+          "name": "alertname",
+          "value": "{{ $alert.Labels.alertname }}"
+        },
+        {{- if $alert.Annotations.message -}}
+        {
+          "name": "message",
+          "value": "{{ $alert.Annotations.message }}"
+        },
+        {{- end -}}
+        {{- if $alert.Labels.cluster -}}
+        {
+          "name": "cluster",
+          "value": "{{ $alert.Labels.cluster }}"
+        },
+        {{- end -}}
+        {{- if $alert.Labels.job -}}
+        {
+          "name": "service",
+          "value": "{{ $alert.Labels.job }}"
+        },
+        {{- end -}}
+        {{- if $alert.Labels.pod -}}
+        {
+          "name": "pod",
+          "value": "{{ $alert.Labels.pod }}"
+        },
+        {{- end -}}
+        {{- if $alert.Labels.namespace -}}
+        {
+          "name": "namespace",
+          "value": "{{ $alert.Labels.namespace }}"
+        },
+        {{- end -}}
+        {{- if $alert.Labels.environment -}}
+        {
+          "name": "environment",
+          "value": "{{ $alert.Labels.environment }}"
+        },
+        {{- end -}}
+        {{- if $alert.Labels.severity -}}
+        {
+          "name": "severity",
+          "value": "{{ $alert.Labels.severity }}"
+        },
+        {{- end -}}
+        {
+          "name": "for help",
+          "value": "[Thanos Ruler](https://thanos-ruler.example.org/)"
+        }
+      ],
+      "markdown": true
+    }
+  {{- end }}
+  ]
+}
+{{ end }}
